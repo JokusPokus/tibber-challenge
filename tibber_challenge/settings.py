@@ -11,15 +11,17 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 import environ
+import os
 from pathlib import Path
 
 
 # Initialize environment variables
 env = environ.Env()
-environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+SETTINGS_DIR = Path(__file__).resolve().parent
+BASE_DIR = SETTINGS_DIR.parent
+environ.Env.read_env(os.path.join(SETTINGS_DIR, '.env'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -29,7 +31,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = env('DEBUG') == 'True'
 
 ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS").split(" ")
 
