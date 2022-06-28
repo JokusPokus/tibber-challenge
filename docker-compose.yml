@@ -8,18 +8,14 @@ services:
       - ./:/usr/src/app/
     ports:
       - "8000:8000"
-    env_file:
-      - ./tibber_challenge/.env.dev
     depends_on:
       - db
   db:
     image: postgres:13.0-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=secret
-      - POSTGRES_DB=accounts
+    env_file:
+      - tibber_challenge/.env.db
 
 volumes:
   postgres_data:
