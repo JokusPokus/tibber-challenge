@@ -7,7 +7,7 @@ services:
     ports:
       - "8000:8000"
     env_file:
-      - ./.env.prod
+      - ./tibber_challenge/.env.prod
     depends_on:
       - db
   db:
@@ -15,7 +15,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ./.env.prod.db
+      - ./tibber_challenge/.env.prod.db
 
 volumes:
   postgres_data:
