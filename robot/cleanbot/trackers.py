@@ -65,6 +65,15 @@ class Line:
                 return False
         return False
 
+    @property
+    def members(self) -> List[int]:
+        """Return a list of all cleaned coordinates within the line."""
+        return [
+            coord
+            for c_range in self.c_ranges
+            for coord in range(c_range.start, c_range.end + 1)
+        ]
+
     def add_cleaned_range(self, new_range: CleanedRange) -> None:
         """Update the line's cleaned ranges.
 
@@ -205,8 +214,12 @@ class RobotTracker:
         """
         total = 0
         for x, col in office.cols.items():
-            for c_range in col.c_ranges:
-                for y in range(c_range.start, c_range.end + 1):
-                    if x not in office.rows[y]:
-                        total += 1
+            total += RobotTracker._unique_vertices_in_column(col, office, x)
+
         return total
+
+    @staticmethod
+    def _unique_vertices_in_column(col, office, x):
+        return sum(
+            1 for y in col.members if x not in office.rows[y]
+        )
