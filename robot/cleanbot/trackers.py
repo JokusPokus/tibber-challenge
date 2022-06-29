@@ -14,7 +14,7 @@ class Vertex:
 
 
 class CleanedRange:
-    """Represents a range of vertices that have been cleaned."""
+    """Represents a range of a row's x coordinates that have been cleaned."""
     def __int__(self, start: int, end: int):
         self.start = start
         self.end = end
@@ -37,7 +37,11 @@ class Office:
         self.num_unique_vertices = 0
 
     def move_robot(self, direction: str, steps: int) -> None:
-        """Move the robot in the specified direction and number of steps."""
+        """Move the robot in the specified direction and number of steps.
+
+        Update the robot's position and record the cleaned vertices. Increment
+        the number of unique vertices that have been cleaned.
+        """
         pass
 
 
