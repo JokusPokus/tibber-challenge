@@ -115,12 +115,12 @@ class Line:
 
 
 class Office:
-    """Represents the office space."""
+    """Represents the office space as a 2D grid of vertices."""
 
     def __init__(self):
         """
-        self.robot_position: the robot's current position within the 2D grid
-
+        self.robot_position: the robot's current position within the 2D grid,
+            initialized (w.l.o.g.) to the center of the grid.
         self.rows: a dictionary with each key being the y coordinate of the
             row and its value being a Line instance
         self.cols: a dictionary with each key being the x coordinate of the
@@ -130,6 +130,7 @@ class Office:
         self.rows = defaultdict(Line)
         self.cols = defaultdict(Line)
 
+        # Add starting position
         self.rows[0].add_cleaned_range(CleanedRange(0))
         self.cols[0].add_cleaned_range(CleanedRange(0))
 
@@ -138,10 +139,10 @@ class Office:
 
         Update the robot's position and record the cleaned vertices.
         """
-        self._add_range_to_single_row(direction, steps)
+        self._add_range_to_line(direction, steps)
         self.robot_position.update(direction, steps)
 
-    def _add_range_to_single_row(self, direction: str, steps: int) -> None:
+    def _add_range_to_line(self, direction: str, steps: int) -> None:
         c_range = self._get_range(direction, steps)
 
         if direction in ['east', 'west']:
