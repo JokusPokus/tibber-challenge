@@ -87,6 +87,29 @@ COMMANDS = [
         10001,
         id='huge_north_south'
     ),
+    pytest.param(
+        [
+            {'direction': 'north', 'steps': 3},
+            {'direction': 'east', 'steps': 3},
+            {'direction': 'south', 'steps': 2},
+            {'direction': 'west', 'steps': 4},
+            {'direction': 'east', 'steps': 2},
+            {'direction': 'north', 'steps': 2},
+            {'direction': 'east', 'steps': 3},
+        ],
+        14,
+        id='complex'
+    ),
+    pytest.param(
+        [
+            {'direction': 'north', 'steps': 1},
+            {'direction': 'east', 'steps': 1},
+            {'direction': 'south', 'steps': 1},
+            {'direction': 'west', 'steps': 1},
+        ] * 10,
+        4,
+        id='circular'
+    ),
 ]
 
 
