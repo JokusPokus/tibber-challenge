@@ -29,24 +29,33 @@ class Vertex:
 
 
 class CleanedRange:
-    """Represents a range of a row's x coordinates that have been cleaned."""
+    """Represents a range of a row's x coordinates or a column's
+    y coordinates that have been cleaned.
+    """
 
     def __init__(self, start: int, end: Optional[int] = None):
         self.start = start
-        self.end = end if end is not None else start
+        self.end = start if end is None else end
 
     @property
     def total(self) -> int:
+        """Return the total number of vertices within the range."""
         return self.end - self.start + 1
 
     def __lt__(self, other) -> bool:
+        """Make two ranges (lexicographically) comparable."""
         return (self.start, self.end) < (other.start, other.end)
 
     def overlaps_with(self, other) -> bool:
+        """Return True if this range overlaps with the other range.
+
+        A direct adjacency is also considered an overlap.
+        """
         return (self.start <= other.start <= self.end + 1) \
-               or (self.start - 1 <= other.end <= self.end)
+            or (self.start - 1 <= other.end <= self.end)
 
     def merge_with(self, other) -> None:
+        """Merge this range with the other range."""
         self.start = min(self.start, other.start)
         self.end = max(self.end, other.end)
 
