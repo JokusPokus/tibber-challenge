@@ -30,7 +30,7 @@ class PostCleaningJob(APIView):
         commands = request.data.get('commands')
 
         start_time = timeit.default_timer()
-        result = RobotTracker.get_num_of_cleaned_vertices(commands)
+        result = RobotTracker().get_num_of_cleaned_vertices(commands)
         end_time = timeit.default_timer()
 
         serializer = ExecutionSerializer(data={

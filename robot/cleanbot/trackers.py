@@ -178,48 +178,45 @@ class RobotTracker:
     of vertices cleaned.
     """
 
-    @staticmethod
-    def get_num_of_cleaned_vertices(commands: List[Dict]) -> int:
+    def __init__(self):
+        self.office = Office()
+
+    def get_num_of_cleaned_vertices(self, commands: List[Dict]) -> int:
         """Calculate the number of unique vertices cleaned by the robot.
 
         Args:
           - commands: a list of commands to be executed, with each command
             specifying the direction to move in and the number of steps.
         """
-        office = Office()
-
         for command in commands:
-            office.move_robot(
+            self.office.move_robot(
                 direction=command['direction'],
                 steps=command['steps']
             )
 
-        return RobotTracker._row_total_of(office) \
-            + RobotTracker._col_total_of(office)
+        return self._row_total + self._col_total
 
-    @staticmethod
-    def _row_total_of(office: Office) -> int:
+    @property
+    def _row_total(self) -> int:
         """Calculate the total number of cleaned vertices recorded in the
         office's rows."""
         return sum(
             row.get_num_of_cleaned_vertices()
-            for row in office.rows.values()
+            for row in self.office.rows.values()
         )
 
-    @staticmethod
-    def _col_total_of(office: Office) -> int:
+    @property
+    def _col_total(self) -> int:
         """Calculate the total number of cleaned vertices recorded in the
         office's columns, minus the ones that are also recorded in the
         office's rows.
         """
-        total = 0
-        for x, col in office.cols.items():
-            total += RobotTracker._unique_vertices_in_column(col, office, x)
-
-        return total
-
-    @staticmethod
-    def _unique_vertices_in_column(col, office, x):
         return sum(
-            1 for y in col.members if x not in office.rows[y]
+            self._unique_vertices_in_column(col, x)
+            for x, col in self.office.cols.items()
+        )
+
+    def _unique_vertices_in_column(self, col: Line, x: int) -> int:
+        return sum(
+            1 for y in col.members if x not in self.office.rows[y]
         )
