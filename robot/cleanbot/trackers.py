@@ -57,6 +57,14 @@ class Line:
     def __init__(self):
         self.c_ranges = []
 
+    def __contains__(self, item) -> bool:
+        for c_range in self.c_ranges:
+            if c_range.start <= item <= c_range.end:
+                return True
+            if c_range.start > item:
+                return False
+        return False
+
     def add_cleaned_range(self, new_range: CleanedRange) -> None:
         """Update the line's cleaned ranges.
 
@@ -100,7 +108,7 @@ class Line:
 class Office:
     """Represents the office space."""
 
-    def __init__(self, robot_position: Optional[Vertex] = None):
+    def __init__(self):
         """
         self.robot_position: the robot's current position within the 2D grid
 
@@ -109,21 +117,34 @@ class Office:
         self.cols: a dictionary with each key being the x coordinate of the
             col and its value being a Line instance
         """
-        self.robot_position = robot_position or Vertex(0, 0)
+        self.robot_position = Vertex(0, 0)
         self.rows = defaultdict(Line)
         self.cols = defaultdict(Line)
 
-        self.rows[self.robot_position.y].add_cleaned_range(
-            CleanedRange(self.robot_position.x)
-        )
+        self.rows[0].add_cleaned_range(CleanedRange(0))
+        self.cols[0].add_cleaned_range(CleanedRange(0))
 
     @property
     def num_of_cleaned_vertices(self) -> int:
         """Return the number of vertices that have been cleaned."""
+        return self._row_total + self._col_total
+
+    @property
+    def _row_total(self) -> int:
         return sum(
             row.get_num_of_cleaned_vertices()
             for row in self.rows.values()
         )
+
+    @property
+    def _col_total(self) -> int:
+        total = 0
+        for x, col in self.cols.items():
+            for c_range in col.c_ranges:
+                for y in range(c_range.start, c_range.end + 1):
+                    if x not in self.rows[y]:
+                        total += 1
+        return total
 
     def move_robot(self, direction: str, steps: int) -> None:
         """Move the robot in the specified direction and number of steps.
