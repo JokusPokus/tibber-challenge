@@ -74,11 +74,12 @@ class Line:
             for coord in range(c_range.start, c_range.end + 1)
         ]
 
-    def add_cleaned_range(self, new_range: CleanedRange) -> None:
+    def insert(self, new_range: CleanedRange) -> None:
         """Update the line's cleaned ranges.
 
         If the given range overlaps with an existing range, the existing range
-        is extended to include the new range.
+        is extended to include the new range. Otherwise, the new range is
+        added to the line.
         """
         # Find the insertion index for new_range such that
         # self.cleaned_ranges remains sorted
@@ -131,8 +132,8 @@ class Office:
         self.cols = defaultdict(Line)
 
         # Add starting position
-        self.rows[0].add_cleaned_range(CleanedRange(0))
-        self.cols[0].add_cleaned_range(CleanedRange(0))
+        self.rows[0].insert(CleanedRange(0))
+        self.cols[0].insert(CleanedRange(0))
 
     def move_robot(self, direction: str, steps: int) -> None:
         """Move the robot in the specified direction and number of steps.
@@ -143,14 +144,17 @@ class Office:
         self.robot_position.update(direction, steps)
 
     def _add_range_to_line(self, direction: str, steps: int) -> None:
-        c_range = self._get_range(direction, steps)
+        """Calculate a CleanedRange instance based on the direction and
+        add it to the appropriate line.
+        """
+        c_range = self._get_range_for(direction, steps)
 
         if direction in ['east', 'west']:
-            self.rows[self.robot_position.y].add_cleaned_range(c_range)
+            self.rows[self.robot_position.y].insert(c_range)
         else:
-            self.cols[self.robot_position.x].add_cleaned_range(c_range)
+            self.cols[self.robot_position.x].insert(c_range)
 
-    def _get_range(self, direction, steps) -> CleanedRange:
+    def _get_range_for(self, direction, steps) -> CleanedRange:
         if direction == 'east':
             c_range = CleanedRange(
                 self.robot_position.x,
