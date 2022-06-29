@@ -124,28 +124,6 @@ class Office:
         self.rows[0].add_cleaned_range(CleanedRange(0))
         self.cols[0].add_cleaned_range(CleanedRange(0))
 
-    @property
-    def num_of_cleaned_vertices(self) -> int:
-        """Return the number of vertices that have been cleaned."""
-        return self._row_total + self._col_total
-
-    @property
-    def _row_total(self) -> int:
-        return sum(
-            row.get_num_of_cleaned_vertices()
-            for row in self.rows.values()
-        )
-
-    @property
-    def _col_total(self) -> int:
-        total = 0
-        for x, col in self.cols.items():
-            for c_range in col.c_ranges:
-                for y in range(c_range.start, c_range.end + 1):
-                    if x not in self.rows[y]:
-                        total += 1
-        return total
-
     def move_robot(self, direction: str, steps: int) -> None:
         """Move the robot in the specified direction and number of steps.
 
@@ -187,9 +165,10 @@ class Office:
 
 
 class RobotTracker:
+    """Tracks robot cleaning jobs and calculates the number
+    of vertices cleaned.
     """
-    Tracks robot cleaning job and calculates the number of vertices cleaned.
-    """
+
     @staticmethod
     def get_num_of_cleaned_vertices(commands: List[Dict]) -> int:
         """Calculate the number of unique vertices cleaned by the robot.
@@ -201,9 +180,27 @@ class RobotTracker:
         office = Office()
 
         for command in commands:
-            direction = command['direction']
-            steps = command['steps']
+            office.move_robot(
+                direction=command['direction'],
+                steps=command['steps']
+            )
 
-            office.move_robot(direction, steps)
+        return RobotTracker._row_total_of(office) \
+            + RobotTracker._col_total_of(office)
 
-        return office.num_of_cleaned_vertices
+    @staticmethod
+    def _row_total_of(office: Office) -> int:
+        return sum(
+            row.get_num_of_cleaned_vertices()
+            for row in office.rows.values()
+        )
+
+    @staticmethod
+    def _col_total_of(office: Office) -> int:
+        total = 0
+        for x, col in office.cols.items():
+            for c_range in col.c_ranges:
+                for y in range(c_range.start, c_range.end + 1):
+                    if x not in office.rows[y]:
+                        total += 1
+        return total
