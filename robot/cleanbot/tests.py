@@ -71,6 +71,22 @@ COMMANDS = [
         7,
         id='partial_overlap'
     ),
+    pytest.param(
+        [
+            {'direction': 'east', 'steps': 10000},
+            {'direction': 'west', 'steps': 10000}
+        ] * 5000,
+        10001,
+        id='huge_east_west'
+    ),
+    pytest.param(
+        [
+            {'direction': 'north', 'steps': 10000},
+            {'direction': 'south', 'steps': 10000}
+        ] * 5000,
+        10001,
+        id='huge_north_south'
+    ),
 ]
 
 
