@@ -2,6 +2,8 @@
 Unit tests for the cleanbot package.
 """
 import pytest
+import random
+import timeit
 
 from .trackers import RobotTracker
 
@@ -128,3 +130,23 @@ class TestRobotTracker:
         """
         result = RobotTracker().get_num_of_cleaned_vertices(commands)
         assert result == expected
+
+    @pytest.mark.skip
+    def test_performance_for_large_problem(self):
+        """The performance of the robot tracker is measured for a
+        large problem. Just to play around and get a feeling.
+        """
+        DIRS = ['north', 'east', 'south', 'west']
+        commands = [
+            {
+                'direction': random.choice(DIRS),
+                'steps': random.randint(1, 10000)
+            }
+            for _ in range(5000)
+        ]
+
+        start_time = timeit.default_timer()
+        result = RobotTracker().get_num_of_cleaned_vertices(commands)
+        elapsed_time = timeit.default_timer() - start_time
+        print(f'Result: {result}\nElapsed time: {elapsed_time}')
+        assert False
