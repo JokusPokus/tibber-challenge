@@ -130,41 +130,39 @@ class Office:
 
         Update the robot's position and record the cleaned vertices.
         """
-        if direction in ['east', 'west']:
-            self._add_range_to_single_row(direction, steps)
-        else:
-            self._add_single_vertices_to_rows(direction, steps)
-
+        self._add_range_to_single_row(direction, steps)
         self.robot_position.update(direction, steps)
 
     def _add_range_to_single_row(self, direction: str, steps: int) -> None:
+        c_range = self._get_range(direction, steps)
+
+        if direction in ['east', 'west']:
+            self.rows[self.robot_position.y].add_cleaned_range(c_range)
+        else:
+            self.cols[self.robot_position.x].add_cleaned_range(c_range)
+
+    def _get_range(self, direction, steps) -> CleanedRange:
         if direction == 'east':
             c_range = CleanedRange(
                 self.robot_position.x,
                 self.robot_position.x + steps
             )
-        else:
+        elif direction == 'west':
             c_range = CleanedRange(
                 self.robot_position.x - steps,
                 self.robot_position.x
             )
-        self.rows[self.robot_position.y].add_cleaned_range(c_range)
-
-    def _add_single_vertices_to_rows(self, direction: str, steps: int) -> None:
-        if direction == 'north':
-            y_indices = range(
-                self.robot_position.y + 1,
-                self.robot_position.y + steps + 1
+        elif direction == 'north':
+            c_range = CleanedRange(
+                self.robot_position.y,
+                self.robot_position.y + steps
             )
         else:
-            y_indices = range(
+            c_range = CleanedRange(
                 self.robot_position.y - steps,
                 self.robot_position.y
             )
-        for y_index in y_indices:
-            self.rows[y_index].add_cleaned_range(
-                CleanedRange(self.robot_position.x)
-            )
+        return c_range
 
 
 class RobotTracker:
