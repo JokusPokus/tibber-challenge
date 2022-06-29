@@ -190,6 +190,8 @@ class RobotTracker:
 
     @staticmethod
     def _row_total_of(office: Office) -> int:
+        """Calculate the total number of cleaned vertices recorded in the
+        office's rows."""
         return sum(
             row.get_num_of_cleaned_vertices()
             for row in office.rows.values()
@@ -197,6 +199,10 @@ class RobotTracker:
 
     @staticmethod
     def _col_total_of(office: Office) -> int:
+        """Calculate the total number of cleaned vertices recorded in the
+        office's columns, minus the ones that are also recorded in the
+        office's rows.
+        """
         total = 0
         for x, col in office.cols.items():
             for c_range in col.c_ranges:
