@@ -8,13 +8,14 @@ from typing import Dict, List, Optional
 
 
 @dataclass
-class Vertex:
-    """Represents a vertex in the 2D office grid."""
+class Position:
+    """Represents a position on a vertex in the 2D office grid."""
     x: int
     y: int
 
     def update(self, direction: str, steps: int) -> None:
-        """Update the vertex based on the given direction and number of steps.
+        """Update the position based on the given direction
+        and number of steps.
         """
         if direction == 'north':
             self.y += steps
@@ -149,7 +150,7 @@ class Office:
         self.cols: a dictionary with each key being the x coordinate of the
             col and its value being a Line instance
         """
-        self.robot_position = Vertex(0, 0)
+        self.robot_position = Position(0, 0)
         self.rows = defaultdict(Line)
         self.cols = defaultdict(Line)
 
