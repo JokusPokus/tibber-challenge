@@ -87,8 +87,5 @@ class TestRobotTracker:
         """The number of vertices visited by the robot is calculated correctly
         with fixed (arbitrary) starting point (without loss of generality).
         """
-        result = RobotTracker.get_num_of_cleaned_vertices(
-            {'x': 0, 'y': 0},
-            commands
-        )
+        result = RobotTracker.get_num_of_cleaned_vertices(commands)
         assert result == expected
