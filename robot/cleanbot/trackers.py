@@ -58,6 +58,11 @@ class Line:
         self.c_ranges = []
 
     def __contains__(self, item) -> bool:
+        """Return True if the given item is in any of the line's
+        self.c_ranges.
+
+        Take advantage of the fact that self.c_ranges is sorted.
+        """
         for c_range in self.c_ranges:
             if c_range.start <= item <= c_range.end:
                 return True
@@ -67,7 +72,12 @@ class Line:
 
     @property
     def members(self) -> List[int]:
-        """Return a list of all cleaned coordinates within the line."""
+        """Return a list of the coordinates of all cleaned vertices
+        within the line.
+
+        If the line represents a row, the coordinates are the x-coordinates.
+        If the line represents a column, the coordinates are the y-coordinates.
+        """
         return [
             coord
             for c_range in self.c_ranges
@@ -154,7 +164,10 @@ class Office:
         else:
             self.cols[self.robot_position.x].insert(c_range)
 
-    def _get_range_for(self, direction, steps) -> CleanedRange:
+    def _get_range_for(self, direction: str, steps: int) -> CleanedRange:
+        """Calculate a CleanedRange instance based on the direction and
+        number of steps.
+        """
         if direction == 'east':
             c_range = CleanedRange(
                 self.robot_position.x,
