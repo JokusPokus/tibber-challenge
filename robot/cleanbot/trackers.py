@@ -43,8 +43,8 @@ class CleanedRange:
         return (self.start, self.end) < (other.start, other.end)
 
     def overlaps_with(self, other) -> bool:
-        return (self.start <= other.start <= self.end) \
-               or (self.start <= other.end <= self.end)
+        return (self.start <= other.start <= self.end + 1) \
+               or (self.start - 1 <= other.end <= self.end)
 
     def merge_with(self, other) -> None:
         self.start = min(self.start, other.start)
