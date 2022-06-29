@@ -27,11 +27,10 @@ class PostCleaningJob(APIView):
           - commands: a list of commands to be executed, with each command
             specifying the direction to move in and the number of steps.
         """
-        start = request.data.get('start')
         commands = request.data.get('commands')
 
         start_time = timeit.default_timer()
-        result = RobotTracker.get_num_of_cleaned_vertices(start, commands)
+        result = RobotTracker.get_num_of_cleaned_vertices(commands)
         end_time = timeit.default_timer()
 
         serializer = ExecutionSerializer(data={
