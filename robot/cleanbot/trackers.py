@@ -109,6 +109,9 @@ class Office:
         """
         self.robot_position = robot_position or Vertex(0, 0)
         self.rows = defaultdict(Row)
+        self.rows[self.robot_position.y].add_cleaned_range(
+            CleanedRange(self.robot_position.x)
+        )
 
     @property
     def num_of_cleaned_vertices(self) -> int:
