@@ -51,14 +51,14 @@ class CleanedRange:
         self.end = max(self.end, other.end)
 
 
-class Row:
-    """Represents a row in the 2D office grid."""
+class Line:
+    """Represents a row or column in the 2D office grid."""
 
     def __init__(self):
         self.c_ranges = []
 
     def add_cleaned_range(self, new_range: CleanedRange) -> None:
-        """Update the row's cleaned ranges.
+        """Update the line's cleaned ranges.
 
         If the given range overlaps with an existing range, the existing range
         is extended to include the new range.
@@ -89,7 +89,7 @@ class Row:
             self.c_ranges.insert(index, new_range)
 
     def get_num_of_cleaned_vertices(self) -> int:
-        """Return the number of vertices in the row that have been cleaned."""
+        """Return the number of vertices in the line that have been cleaned."""
         return sum(c_range.total for c_range in self.c_ranges)
 
     def _merge_existing_ranges(self, index, next_higher, next_lower) -> None:
@@ -105,10 +105,14 @@ class Office:
         self.robot_position: the robot's current position within the 2D grid
 
         self.rows: a dictionary with each key being the y coordinate of the
-            row and its value being a Row instance
+            row and its value being a Line instance
+        self.cols: a dictionary with each key being the x coordinate of the
+            col and its value being a Line instance
         """
         self.robot_position = robot_position or Vertex(0, 0)
-        self.rows = defaultdict(Row)
+        self.rows = defaultdict(Line)
+        self.cols = defaultdict(Line)
+
         self.rows[self.robot_position.y].add_cleaned_range(
             CleanedRange(self.robot_position.x)
         )
