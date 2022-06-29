@@ -1,10 +1,12 @@
 import timeit
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import permissions
+from rest_framework.response import JsonResponse
+from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
+from rest_framework.views import APIView
 
 from .cleanbot import RobotTracker
+from .serializers import ExecutionSerializer
 
 
 class ListUsers(APIView):
@@ -32,4 +34,14 @@ class ListUsers(APIView):
         result = RobotTracker.get_num_of_cleaned_vertices(start, commands)
         end_time = timeit.default_timer()
 
-        return Response()
+        serializer = ExecutionSerializer(data={
+            'commands': len(commands),
+            'result': result,
+            'duration': end_time - start_time
+        })
+
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=HTTP_200_OK)
+
+        return JsonResponse(serializer.errors, status=HTTP_400_BAD_REQUEST)
