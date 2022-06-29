@@ -110,6 +110,14 @@ class Office:
         self.robot_position = robot_position or Vertex(0, 0)
         self.rows = defaultdict(Row)
 
+    @property
+    def num_of_cleaned_vertices(self) -> int:
+        """Return the number of vertices that have been cleaned."""
+        return sum(
+            row.get_num_of_cleaned_vertices()
+            for row in self.rows.values()
+        )
+
     def move_robot(self, direction: str, steps: int) -> None:
         """Move the robot in the specified direction and number of steps.
 
@@ -172,4 +180,4 @@ class RobotTracker:
 
             office.move_robot(direction, steps)
 
-        return office.num_unique_vertices
+        return office.num_of_cleaned_vertices
