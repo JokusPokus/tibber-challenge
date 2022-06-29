@@ -91,29 +91,29 @@ class Line:
         is extended to include the new range. Otherwise, the new range is
         added to the line.
         """
-        # Find the insertion index for new_range such that
+        # Find index for new_range to be inserted such that
         # self.cleaned_ranges remains sorted
         index = bisect.bisect_left(self.c_ranges, new_range)
 
         # If the given range overlaps with an existing range, extend the
         # existing range to include the new range.
-        left_merged = right_merged = False
+        is_left_merged = is_right_merged = False
         if index > 0:
             next_lower = self.c_ranges[index - 1]
             if new_range.overlaps_with(next_lower):
                 next_lower.merge_with(new_range)
-                left_merged = True
+                is_left_merged = True
 
         if index < len(self.c_ranges):
             next_higher = self.c_ranges[index]
             if new_range.overlaps_with(next_higher):
                 next_higher.merge_with(new_range)
-                right_merged = True
+                is_right_merged = True
 
-        if right_merged and left_merged:
+        if is_right_merged and is_left_merged:
             self._merge_existing_ranges(index, next_higher, next_lower)
 
-        elif not right_merged and not left_merged:
+        elif not is_right_merged and not is_left_merged:
             self.c_ranges.insert(index, new_range)
 
     def get_num_of_cleaned_vertices(self) -> int:
@@ -121,6 +121,9 @@ class Line:
         return sum(c_range.total for c_range in self.c_ranges)
 
     def _merge_existing_ranges(self, index, next_higher, next_lower) -> None:
+        """Merge two existing ranges and delete the larger one to prevent
+        redundancies.
+        """
         next_lower.merge_with(next_higher)
         self.c_ranges.pop(index)
 
