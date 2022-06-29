@@ -1,6 +1,10 @@
+import timeit
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
+
+from .cleanbot import RobotTracker
 
 
 class ListUsers(APIView):
@@ -23,5 +27,9 @@ class ListUsers(APIView):
         """
         start = request.data.get('start')
         commands = request.data.get('commands')
+
+        start_time = timeit.default_timer()
+        result = RobotTracker.get_num_of_cleaned_vertices(start, commands)
+        end_time = timeit.default_timer()
 
         return Response()
