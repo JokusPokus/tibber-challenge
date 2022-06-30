@@ -11,13 +11,13 @@ run tests. The file also contains some pointers to important parts of the code.
 * [Docker](https://docs.docker.com/get-docker/) (installed and running)
 
 ### Installation:
-1. Clone the respository:
+1. **Clone the respository:**
 ```zsh
 git clone https://github.com/JokusPokus/tibber-challenge.git
 cd ./tibber_challenge
 ```
 
-2. Set the necessary environment variables in an `.env` file at `tibber_challenge/tibber_challenge/.env`.
+2. **Set the necessary environment variables** in an `.env` file at `tibber_challenge/tibber_challenge/.env`.
 You can find the required environment variables in the `.env.dist` file.
 
     If you would like to use the `docker-compose` script, you need to specify
@@ -26,7 +26,7 @@ at `tibber_challenge/tibber_challenge/.env.db`, based on the requirements
 in `tibber_challenge/tibber_challenge/.env.db.dist`.
 
 
-3. Run the `docker-compose` script to spin up the containers:
+3. **Run the `docker-compose` script** to spin up the containers:
 ```zsh
 docker-compose up -d --build
 ```
@@ -38,7 +38,7 @@ docker-compose -f docker-compose.prod.yml up -d --build
 ```
 
 
-4. Run the test suite:
+4. **Run the test suite:**
 ```zsh
 docker-compose exec web pytest
 ```
