@@ -38,13 +38,7 @@ docker-compose -f docker-compose.prod.yml up -d --build
 ```
 
 
-4. Migrate the database:
-```zsh
-docker-compose exec web python manage.py migrate
-```
-
-
-5. Run the test suite:
+4. Run the test suite:
 ```zsh
 docker-compose exec web pytest
 ```

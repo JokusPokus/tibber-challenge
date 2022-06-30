@@ -3,7 +3,9 @@ version: '3.8'
 services:
   web:
     build: .
-    command: gunicorn hello_django.wsgi:application --bind 0.0.0.0:8000
+    command: >
+      sh -c "python3 manage.py migrate &&
+             gunicorn tibber_challenge.wsgi:application --bind 0.0.0.0:8000"
     ports:
       - "5000:8000"
     depends_on:
