@@ -112,6 +112,15 @@ COMMANDS = [
         4,
         id='circular'
     ),
+    pytest.param(
+        [
+            {'direction': 'north', 'steps': 3},
+            {'direction': 'east', 'steps': 1},
+            {'direction': 'south', 'steps': 3},
+        ],
+        8,
+        id='tight_snake'
+    ),
 ]
 
 
