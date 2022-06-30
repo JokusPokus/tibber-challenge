@@ -1,5 +1,5 @@
 """
-Tracker classes for robot cleaning jobs.
+Tracker and utility classes for robot cleaning jobs.
 """
 import bisect
 from collections import defaultdict
@@ -182,26 +182,19 @@ class Office:
         number of steps.
         """
         if direction == 'east':
-            c_range = CleanedRange(
-                self.robot_position.x,
-                self.robot_position.x + steps
-            )
+            start = self.robot_position.x
+            end = self.robot_position.x + steps
         elif direction == 'west':
-            c_range = CleanedRange(
-                self.robot_position.x - steps,
-                self.robot_position.x
-            )
+            start = self.robot_position.x - steps
+            end = self.robot_position.x
         elif direction == 'north':
-            c_range = CleanedRange(
-                self.robot_position.y,
-                self.robot_position.y + steps
-            )
+            start = self.robot_position.y
+            end = self.robot_position.y + steps
         else:
-            c_range = CleanedRange(
-                self.robot_position.y - steps,
-                self.robot_position.y
-            )
-        return c_range
+            start = self.robot_position.y - steps
+            end = self.robot_position.y
+
+        return CleanedRange(start, end)
 
 
 class RobotTracker:
