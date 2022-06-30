@@ -6,6 +6,7 @@ from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 
 from .cleanbot import RobotTracker
+from .cleanbot.offices import TwoDimGridOffice
 from .serializers import ExecutionSerializer
 
 
@@ -28,9 +29,10 @@ class PostCleaningJob(APIView):
             specifying the direction to move in and the number of steps.
         """
         commands = request.data.get('commands')
+        tracker = RobotTracker(office=TwoDimGridOffice())
 
         start_time = timeit.default_timer()
-        result = RobotTracker().get_num_of_cleaned_vertices(commands)
+        result = tracker.get_num_of_cleaned_vertices(commands)
         end_time = timeit.default_timer()
 
         serializer = ExecutionSerializer(data={

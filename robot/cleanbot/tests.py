@@ -6,6 +6,7 @@ import random
 import timeit
 
 from .trackers import RobotTracker, SimpleRobotTracker
+from .offices import TwoDimGridOffice
 
 
 COMMANDS = [
@@ -137,7 +138,8 @@ class TestRobotTracker:
         """The number of vertices visited by the robot is calculated correctly
         with fixed (arbitrary) starting point (without loss of generality).
         """
-        result = RobotTracker().get_num_of_cleaned_vertices(commands)
+        tracker = RobotTracker(office=TwoDimGridOffice())
+        result = tracker.get_num_of_cleaned_vertices(commands)
         assert result == expected
 
     @pytest.mark.skip
@@ -154,7 +156,9 @@ class TestRobotTracker:
             for _ in range(5000)
         ]
 
+        tracker = RobotTracker(office=TwoDimGridOffice())
+
         start_time = timeit.default_timer()
-        result = RobotTracker().get_num_of_cleaned_vertices(commands)
+        result = tracker.get_num_of_cleaned_vertices(commands)
         elapsed_time = timeit.default_timer() - start_time
         print(f'Unique vertices: {result}\nElapsed time: {elapsed_time}')
