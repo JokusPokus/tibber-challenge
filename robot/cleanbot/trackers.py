@@ -30,27 +30,29 @@ class Position:
 
 
 class CleanedRange:
-    """Represents a range of a row's x coordinates or a column's
-    y coordinates that have been cleaned.
+    """Represents a range of x-coordinates within a row or y-coordinates
+    within a column. Between the start and end coordinates (inclusive),
+    all vertices are cleaned.
     """
 
     def __init__(self, start: int, end: Optional[int] = None):
         self.start = start
         self.end = start if end is None else end
 
+    def __lt__(self, other) -> bool:
+        """Make two ranges (lexicographically) comparable."""
+        return (self.start, self.end) < (other.start, other.end)
+
     @property
     def total(self) -> int:
         """Return the total number of vertices within the range."""
         return self.end - self.start + 1
 
-    def __lt__(self, other) -> bool:
-        """Make two ranges (lexicographically) comparable."""
-        return (self.start, self.end) < (other.start, other.end)
-
     def overlaps_with(self, other) -> bool:
         """Return True if this range overlaps with the other range.
 
-        A direct adjacency is also considered an overlap.
+        A direct adjacency (e.g., self ends at 4, other starts at 5)
+        is also considered an overlap.
         """
         return (self.start <= other.start <= self.end + 1) \
             or (self.start - 1 <= other.end <= self.end)
@@ -62,7 +64,7 @@ class CleanedRange:
 
 
 class Line:
-    """Represents a row or column in the 2D office grid."""
+    """Represents a row or column in a 2D grid."""
 
     def __init__(self):
         self.c_ranges = []
@@ -71,7 +73,7 @@ class Line:
         """Return True if the given item is in any of the line's
         self.c_ranges.
 
-        Take advantage of the fact that self.c_ranges is sorted.
+        Takes advantage of the fact that self.c_ranges is sorted.
         """
         for c_range in self.c_ranges:
             if c_range.start <= item <= c_range.end:
@@ -81,7 +83,7 @@ class Line:
         return False
 
     @property
-    def members(self) -> List[int]:
+    def cleaned_coords(self) -> List[int]:
         """Return a list of the coordinates of all cleaned vertices
         within the line.
 
@@ -242,7 +244,7 @@ class RobotTracker:
 
     def _unique_vertices_in_column(self, col: Line, x: int) -> int:
         return sum(
-            1 for y in col.members if x not in self.office.rows[y]
+            1 for y in col.cleaned_coords if x not in self.office.rows[y]
         )
 
 
