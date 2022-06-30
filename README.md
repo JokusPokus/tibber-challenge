@@ -67,3 +67,14 @@ via `trackers.SimpleRobotTracker`) is a 'naive' approach and performs
 poorly for large problem sizes. The optimized one (implemented via 
 `trackers.RobotTracker`) takes advantage of representing cleaned vertices as
 ranges rather than single points in the grid.
+
+
+## Refactored version
+I refactored the code to make it more extensible by enabling dependency
+inversion. For example, I defined an abstract base class (Python's way of specifying
+shared interfaces for inheriting classes) for office representations. This 
+makes it easier to implement an office with different specifications (e.g., 
+with a different kind of grid or constraints).
+
+However, this feels a bit over-engineered for the current challenge. Hence, 
+I kept the changes in a separate branch `refac`.
