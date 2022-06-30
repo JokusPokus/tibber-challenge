@@ -140,12 +140,14 @@ class Line:
 
 
 class Office:
-    """Represents the office space as a 2D grid of vertices."""
+    """Represents the office space as a 2D grid of vertices through which
+    the robot can be moved.
+    """
 
     def __init__(self):
         """
         self.robot_position: the robot's current position within the 2D grid,
-            initialized (w.l.o.g.) to the center of the grid.
+            initialized (w.l.o.g.) to the origin.
         self.rows: a dictionary with each key being the y coordinate of the
             row and its value being a Line instance
         self.cols: a dictionary with each key being the x coordinate of the
