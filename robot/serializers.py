@@ -8,8 +8,8 @@ class ExecutionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Execution
-        fields = ['timestamp', 'commands', 'result', 'duration']
-        read_only_fields = ['timestamp']
+        fields = ['id', 'timestamp', 'commands', 'result', 'duration']
+        read_only_fields = ['id', 'timestamp']
 
     def to_representation(self, instance):
         """
