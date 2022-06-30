@@ -5,7 +5,7 @@ import pytest
 import random
 import timeit
 
-from .trackers import RobotTracker
+from .trackers import RobotTracker, SimpleRobotTracker
 
 
 COMMANDS = [
@@ -148,5 +148,4 @@ class TestRobotTracker:
         start_time = timeit.default_timer()
         result = RobotTracker().get_num_of_cleaned_vertices(commands)
         elapsed_time = timeit.default_timer() - start_time
-        print(f'Result: {result}\nElapsed time: {elapsed_time}')
-        assert False
+        print(f'Unique vertices: {result}\nElapsed time: {elapsed_time}')
