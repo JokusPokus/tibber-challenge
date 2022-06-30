@@ -43,8 +43,7 @@ class CleanedRange:
         """Make two ranges (lexicographically) comparable."""
         return (self.start, self.end) < (other.start, other.end)
 
-    @property
-    def total(self) -> int:
+    def __len__(self) -> int:
         """Return the total number of vertices within the range."""
         return self.end - self.start + 1
 
@@ -130,7 +129,7 @@ class Line:
 
     def get_num_of_cleaned_vertices(self) -> int:
         """Return the number of vertices in the line that have been cleaned."""
-        return sum(c_range.total for c_range in self.c_ranges)
+        return sum(len(c_range) for c_range in self.c_ranges)
 
     def _merge_existing_ranges(self, index, next_higher, next_lower) -> None:
         """Merge two existing ranges and delete the larger one to prevent
